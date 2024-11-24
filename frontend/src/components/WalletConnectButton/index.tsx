@@ -1,13 +1,9 @@
 import useWalletStore from "@/stores/walletStore";
 import { minifyAddress } from "@/utils";
-import { useEffect } from "react";
 
+// TODO:認証済みの場合に自動で接続するように修正する
 export const WalletConnectButton = () => {
   const { signer, address, isLoading, connectWallet } = useWalletStore();
-
-  useEffect(() => {
-    connectWallet();
-  }, [connectWallet]);
 
   if (signer && address)
     return <p className="flexh-10">{`👛${minifyAddress(address)}`}</p>;
