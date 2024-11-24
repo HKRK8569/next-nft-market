@@ -12,7 +12,6 @@ export default function RootLayout({
         <Header />
         <div className="h-full w-full px-4">{children}</div>
       </body>
-      <div></div>
     </html>
   );
 }
