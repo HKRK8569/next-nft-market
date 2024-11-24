@@ -1,4 +1,5 @@
 import useWalletStore from "@/stores/walletStore";
+import { minifyAddress } from "@/utils";
 import { useEffect } from "react";
 
 export const WalletConnectButton = () => {
@@ -7,11 +8,6 @@ export const WalletConnectButton = () => {
   useEffect(() => {
     connectWallet();
   }, [connectWallet]);
-  const minifyAddress = (address: string) => {
-    const start = address.substring(0, 5);
-    const end = address.substring(address.length - 4);
-    return `${start}...${end}`;
-  };
 
   if (signer && address)
     return <p className="flexh-10">{`👛${minifyAddress(address)}`}</p>;
