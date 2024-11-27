@@ -4,7 +4,7 @@ pragma solidity ^0.8.27;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract MyToken is ERC721, ERC721URIStorage {
+contract NFTMarket is ERC721, ERC721URIStorage {
     uint256 private _nextTokenId;
     event NFTTransfer(
         uint256 tokenID,
