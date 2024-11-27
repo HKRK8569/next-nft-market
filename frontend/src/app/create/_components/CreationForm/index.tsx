@@ -1,43 +1,52 @@
 import ImagePicker from "@/app/create/_components/ImagePicker";
 import { Input } from "@/components/Input";
+import useNFTMarket from "@/hooks/useNFTMarket";
+import useWalletStore from "@/stores/walletStore";
+import { showErrorPopUp, showSuccessPopUp } from "@/utils";
 import { useRef, useState } from "react";
-import { toast } from "react-toastify";
+
+export type CreationValues = {
+  name: string;
+  description: string;
+  image: File;
+};
 
 const CreationForm = () => {
   const [profileImage, setProfileImage] = useState<string | null>();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const createNFTAction = (event: FormData) => {
-    const title = event.get("title");
-    const description = event.get("description");
-    if (!title || !description || !profileImage) {
-      toast.error("未入力の箇所があります。", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+  const { createNFT } = useNFTMarket();
+  const { signer } = useWalletStore();
+
+  const createNFTAction = async (event: FormData) => {
+    const name = event.get("name") as string | undefined;
+    const description = event.get("description") as string | undefined;
+    const image = event.get("image") as File | undefined;
+
+    if (!signer) {
+      showErrorPopUp("ウォレットを接続してください");
+      return;
+    }
+    if (!name || !description || !image) {
+      showErrorPopUp("未入力の箇所があります。");
       return;
     }
 
-    if (inputRef.current) {
-      inputRef.current.value = "";
+    try {
+      await createNFT({
+        name,
+        description,
+        image,
+      });
+
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+      setProfileImage(null);
+      showSuccessPopUp("NFTを作成しました。");
+    } catch {
+      showErrorPopUp("NFTの作成に失敗しました。");
     }
-    setProfileImage(null);
-    toast("mint", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
   };
 
   return (
@@ -50,7 +59,7 @@ const CreationForm = () => {
         />
       </div>
       <div className="pb-8">
-        <Input className="w-full " placeholder="タイトル" name="title" />
+        <Input className="w-full " placeholder="タイトル" name="name" />
       </div>
       <div className="pb-8">
         <textarea
