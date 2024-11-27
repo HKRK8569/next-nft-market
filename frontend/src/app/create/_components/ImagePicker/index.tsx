@@ -30,7 +30,7 @@ const ImagePicker = ({ profileImage, inputRef, setProfileImage }: Props) => {
       )}
       <input
         ref={inputRef}
-        name="picture"
+        name="image"
         type="file"
         className="hidden"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
