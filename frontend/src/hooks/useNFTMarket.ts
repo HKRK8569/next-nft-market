@@ -3,6 +3,8 @@ import useWalletStore from "@/stores/walletStore";
 import NFT_MARKET from "../contracts/NFTMarket#NFTMarket.json";
 import { Contract } from "ethers";
 import { CreationValues } from "@/app/create/_components/CreationForm";
+import { uploadNFTStorageApi } from "@/apis/nft-storage";
+import { createNFTApi } from "@/apis/nft";
 
 const useNFTMarket = () => {
   const { signer } = useWalletStore();
@@ -20,16 +22,20 @@ const useNFTMarket = () => {
       data.append("description", values.description);
       data.append("image", values.image);
 
-      const response = await fetch("/api/nft-storage", {
-        method: "POST",
-        body: data,
+      const { json_path, image_path } = await uploadNFTStorageApi(data);
+
+      const transaction = await nftMarket.createNFT(json_path);
+
+      const result = await transaction.wait();
+
+      await createNFTApi({
+        tokenId: result.blockNumber,
+        name: values.name,
+        description: values.description,
+        imageUri: json_path,
+        metadataUri: image_path,
+        userAddress: signer.address,
       });
-
-      const json = await response.json();
-
-      const transaction = await nftMarket.createNFT(json.json_path);
-
-      await transaction.wait();
     } catch (err) {
       console.log(err);
       throw err;
