@@ -50,7 +50,7 @@ const CreationForm = () => {
   };
 
   return (
-    <form action={createNFTAction} className="w-[500px] mx-auto">
+    <form action={createNFTAction} className="mx-auto w-[500px]">
       <div className="p-8">
         <ImagePicker
           profileImage={profileImage}
@@ -59,20 +59,20 @@ const CreationForm = () => {
         />
       </div>
       <div className="pb-8">
-        <Input className="w-full " placeholder="タイトル" name="name" />
+        <Input className="w-full" placeholder="タイトル" name="name" />
       </div>
       <div className="pb-8">
         <textarea
           placeholder="概要"
           name="description"
-          className="w-full h-[100px] block border border-gray-400 p-2 rounded focus:border-black outline-none resize-none"
+          className="block h-[100px] w-full resize-none rounded border border-gray-400 p-2 outline-none focus:border-black"
         />
       </div>
 
       <div className="pb-8">
         <button
           type="submit"
-          className="w-full p-2 hover:opacity-50 rounded bg-black block text-white"
+          className="block w-full rounded bg-black p-2 text-white hover:opacity-50"
         >
           NFT作成
         </button>

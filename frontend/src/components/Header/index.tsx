@@ -6,7 +6,7 @@ import PAGES from "@/constants/pages";
 
 const Header = () => {
   return (
-    <header className="sticky bg-white z-50 top-0 flex py-2 justify-between items-center w-full border-b border-gray-300 px-4">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-gray-300 bg-white px-4 py-2">
       <div className="flex items-center">
         <Link href={PAGES.TOP} className="mr-8">
           MarketPlace

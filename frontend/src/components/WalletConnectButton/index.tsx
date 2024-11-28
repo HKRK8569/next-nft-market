@@ -6,7 +6,9 @@ export const WalletConnectButton = () => {
   const { signer, address, isLoading, connectWallet } = useWalletStore();
 
   if (signer && address)
-    return <p className="flexh-10">{`👛${minifyAddress(address)}`}</p>;
+    return (
+      <p className="flex h-10 items-center">{`👛${minifyAddress(address)}`}</p>
+    );
   return (
     <button
       onClick={connectWallet}

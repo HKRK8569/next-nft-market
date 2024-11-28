@@ -15,7 +15,7 @@ const ImagePicker = ({ profileImage, inputRef, setProfileImage }: Props) => {
             inputRef.current?.click();
           }}
           role="button"
-          className="flex justify-center items-center w-[300px] h-[300px] border border-gray-400 rounded mx-auto hover:bg-gray-50"
+          className="mx-auto flex size-[300px] items-center justify-center rounded border border-gray-400 hover:bg-gray-50"
         >
           <p>ファイルを選択</p>
         </div>
@@ -24,7 +24,7 @@ const ImagePicker = ({ profileImage, inputRef, setProfileImage }: Props) => {
           src={profileImage}
           width={300}
           height={300}
-          className="w-[300px] h-[300px] border border-gray-400 rounded mx-auto"
+          className="mx-auto size-[300px] rounded border border-gray-400"
           alt="image"
         />
       )}
