@@ -32,7 +32,10 @@ export async function POST(req: any) {
     };
     await fs.promises.writeFile(jsonUploadPath, JSON.stringify(jsonObj));
 
-    return NextResponse.json({ json_path: jsonUploadPath }, { status: 200 });
+    return NextResponse.json(
+      { json_path: jsonUploadPath, image_path: pictureUploadPath },
+      { status: 200 }
+    );
   } catch (e) {
     console.log(e);
     return NextResponse.json(
