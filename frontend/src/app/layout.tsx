@@ -10,8 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <></>
-      <body className="h-screen w-screen flex flex-col">
+      <body className="flex h-screen w-screen flex-col">
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -25,7 +24,7 @@ export default function RootLayout({
           theme="light"
         />
         <Header />
-        <div className="h-full w-full">{children}</div>
+        <div>{children}</div>
       </body>
     </html>
   );

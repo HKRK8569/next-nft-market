@@ -6,9 +6,11 @@ import PAGES from "@/constants/pages";
 
 const Header = () => {
   return (
-    <header className="flex h-16 justify-between items-center w-full border-b border-gray-300 px-4">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-gray-300 bg-white px-4 py-2">
       <div className="flex items-center">
-        <p className="mr-8">MarketPlace</p>
+        <Link href={PAGES.TOP} className="mr-8">
+          MarketPlace
+        </Link>
         <div className="flex justify-center">
           <Link href={PAGES.CREATE}>NFT作成</Link>
         </div>
