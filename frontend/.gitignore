@@ -40,9 +40,9 @@ yarn-error.log*
 next-env.d.ts
 
 # file
-files/jsons/*
+public/files/jsons/*
 !memo.md
 
-files/pictures/*
+public/files/images/*
 !memo.md
 
