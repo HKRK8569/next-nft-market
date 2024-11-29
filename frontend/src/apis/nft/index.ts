@@ -1,4 +1,5 @@
 import { Nft } from "@prisma/client";
+import { Fetcher } from "swr";
 
 export type CreateNFTApiBody = {
   tokenId: number;
@@ -17,3 +18,6 @@ export const createNFTApi = async (body: CreateNFTApiBody): Promise<Nft> => {
   const json: Nft = await response.json();
   return json;
 };
+
+export const getUserAddressNFTsFetcher: Fetcher<Nft[], string> = async (url) =>
+  fetch(url).then((res) => res.json());

@@ -25,10 +25,18 @@ const CreationForm = () => {
 
     if (!signer) {
       showErrorPopUp("ウォレットを接続してください");
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+      setProfileImage(null);
       return;
     }
     if (!name || !description || !image) {
       showErrorPopUp("未入力の箇所があります。");
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+      setProfileImage(null);
       return;
     }
 
