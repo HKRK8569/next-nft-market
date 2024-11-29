@@ -4,6 +4,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const userAddress = searchParams.get("userAddress");
+  if (!userAddress) {
+    return NextResponse.json(
+      { error: "ユーザーアドレスを指定してください" },
+      { status: 400 },
+    );
+  }
+
+  const response = await prisma.nft.findMany({
+    where: {
+      userAddress,
+    },
+  });
+
+  return NextResponse.json(response, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body: CreateNFTApiBody = await req.json();

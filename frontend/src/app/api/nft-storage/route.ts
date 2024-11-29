@@ -15,11 +15,11 @@ export async function POST(req: any) {
     const uuid = randomUUID();
 
     const extension = image.name.split(".").pop();
-    const pictureUploadDir = path.join(process.cwd(), "files/pictures");
-    const jsonUploadDir = path.join(process.cwd(), "files/jsons");
+    const pictureUploadDir = path.join(process.cwd(), "public/files/images");
+    const jsonUploadDir = path.join(process.cwd(), "public/files/jsons");
     const pictureUploadPath = path.join(
       pictureUploadDir,
-      `${uuid}.${extension}`
+      `${uuid}.${extension}`,
     );
     const jsonUploadPath = path.join(jsonUploadDir, `${uuid}.json`);
     const buffer = Buffer.from(await image.arrayBuffer());
@@ -33,14 +33,17 @@ export async function POST(req: any) {
     await fs.promises.writeFile(jsonUploadPath, JSON.stringify(jsonObj));
 
     return NextResponse.json(
-      { json_path: jsonUploadPath, image_path: pictureUploadPath },
-      { status: 200 }
+      {
+        json_path: `/files/jsons/${uuid}.json`,
+        image_path: `/files/images/${uuid}.${extension}`,
+      },
+      { status: 200 },
     );
   } catch (e) {
     console.log(e);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

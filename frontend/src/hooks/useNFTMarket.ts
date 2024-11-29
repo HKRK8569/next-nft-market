@@ -5,17 +5,18 @@ import { Contract } from "ethers";
 import { CreationValues } from "@/app/create/_components/CreationForm";
 import { uploadNFTStorageApi } from "@/apis/nft-storage";
 import { createNFTApi } from "@/apis/nft";
+import { useSWRConfig } from "swr";
 
 const useNFTMarket = () => {
   const { signer } = useWalletStore();
-
+  const { mutate } = useSWRConfig();
   const createNFT = async (values: CreationValues) => {
     try {
       if (!signer) return;
       const nftMarket = new Contract(
         NFT_MARKET_ADDRESS,
         NFT_MARKET.abi,
-        signer
+        signer,
       );
       const data = new FormData();
       data.append("name", values.name);
@@ -32,10 +33,11 @@ const useNFTMarket = () => {
         tokenId: result.blockNumber,
         name: values.name,
         description: values.description,
-        imageUri: json_path,
-        metadataUri: image_path,
+        imageUri: image_path,
+        metadataUri: json_path,
         userAddress: signer.address,
       });
+      mutate(`/api/nfts?userAddress=${signer.address}`);
     } catch (err) {
       console.log(err);
       throw err;
