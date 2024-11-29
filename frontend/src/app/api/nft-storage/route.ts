@@ -15,8 +15,8 @@ export async function POST(req: any) {
     const uuid = randomUUID();
 
     const extension = image.name.split(".").pop();
-    const pictureUploadDir = path.join(process.cwd(), "public/pictures");
-    const jsonUploadDir = path.join(process.cwd(), "public/jsons");
+    const pictureUploadDir = path.join(process.cwd(), "public/files/images");
+    const jsonUploadDir = path.join(process.cwd(), "public/files/jsons");
     const pictureUploadPath = path.join(
       pictureUploadDir,
       `${uuid}.${extension}`,
