@@ -1,4 +1,6 @@
 import { Input } from "@/components/Input";
+import useNFTMarket from "@/hooks/useNFTMarket";
+import { showErrorPopUp, showSuccessPopUp } from "@/utils";
 import { Nft } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
@@ -8,11 +10,27 @@ type Props = {
 };
 
 const MyNFTCard = ({ nft }: Props) => {
+  const { listNFT } = useNFTMarket();
   const [value, setValue] = useState(0.000001);
   const [isOpen, setOpen] = useState(false);
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+
+  const listNFTAction = async () => {
+    try {
+      await listNFT({
+        tokenId: nft.tokenId,
+        nftId: nft.id,
+        price: value,
+      });
+      showSuccessPopUp("出品しました。");
+    } catch (e) {
+      console.log(e);
+      showErrorPopUp("出品に失敗しました");
+    }
+    closeModal();
+  };
   return (
     <>
       <div>
@@ -36,6 +54,7 @@ const MyNFTCard = ({ nft }: Props) => {
             </div>
             <div className="p-2">
               <Input
+                name="price"
                 value={value}
                 onChange={(e) => {
                   setValue(Number(e.target.value));
@@ -47,11 +66,17 @@ const MyNFTCard = ({ nft }: Props) => {
                 min={0.000001}
               />
             </div>
-            <div className="flex justify-end border-t border-black p-2">
-              <button className="rounded bg-black p-2 px-4 text-white">
+            <form
+              action={listNFTAction}
+              className="flex justify-end border-t border-black p-2"
+            >
+              <button
+                type="submit"
+                className="rounded bg-black p-2 px-4 text-white"
+              >
                 出品
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
