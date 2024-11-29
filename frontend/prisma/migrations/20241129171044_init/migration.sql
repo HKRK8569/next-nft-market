@@ -19,8 +19,9 @@ CREATE TABLE "Nft" (
 -- CreateTable
 CREATE TABLE "List" (
     "id" SERIAL NOT NULL,
+    "nftId" INTEGER NOT NULL,
     "price" INTEGER NOT NULL,
-    "status" "ListingStatus" NOT NULL,
+    "status" "ListingStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "List_pkey" PRIMARY KEY ("id")
@@ -44,6 +45,9 @@ CREATE UNIQUE INDEX "Nft_tokenId_key" ON "Nft"("tokenId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TransactionHistory_listId_key" ON "TransactionHistory"("listId");
+
+-- AddForeignKey
+ALTER TABLE "List" ADD CONSTRAINT "List_nftId_fkey" FOREIGN KEY ("nftId") REFERENCES "Nft"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TransactionHistory" ADD CONSTRAINT "TransactionHistory_nftId_fkey" FOREIGN KEY ("nftId") REFERENCES "Nft"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

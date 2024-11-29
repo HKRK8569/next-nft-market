@@ -24,12 +24,15 @@ model Nft {
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now()) @updatedAt
   transactionHistories TransactionHistory[]
+  lists                List[]
 }
 
 model List {
   id                 Int                 @id @default(autoincrement())
+  nftId              Int
+  nft                Nft                 @relation(fields: [nftId], references: [id])
   price              Int
-  status             ListingStatus
+  status             ListingStatus       @default(ACTIVE)
   createdAt          DateTime            @default(now())
   transactionHistory TransactionHistory?
 }
