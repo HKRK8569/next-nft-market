@@ -9,11 +9,16 @@ import { usePathname } from "next/navigation";
 const links = [
   {
     id: 1,
+    title: "TOP",
+    href: PAGES.TOP,
+  },
+  {
+    id: 2,
     title: "NFT作成",
     href: PAGES.CREATE,
   },
   {
-    id: 2,
+    id: 3,
     title: "マイページ",
     href: PAGES.MYPAGE,
   },
