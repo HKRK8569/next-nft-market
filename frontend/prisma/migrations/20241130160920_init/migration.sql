@@ -20,7 +20,7 @@ CREATE TABLE "Nft" (
 CREATE TABLE "List" (
     "id" SERIAL NOT NULL,
     "nftId" INTEGER NOT NULL,
-    "price" INTEGER NOT NULL,
+    "price" DECIMAL(65,30) NOT NULL,
     "status" "ListingStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -33,7 +33,7 @@ CREATE TABLE "TransactionHistory" (
     "nftId" INTEGER NOT NULL,
     "buyerAddress" TEXT NOT NULL,
     "sellerAddress" TEXT NOT NULL,
-    "price" INTEGER NOT NULL,
+    "price" DECIMAL(65,30) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "listId" INTEGER NOT NULL,
 
