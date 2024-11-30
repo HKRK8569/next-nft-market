@@ -31,7 +31,7 @@ model List {
   id                 Int                 @id @default(autoincrement())
   nftId              Int
   nft                Nft                 @relation(fields: [nftId], references: [id])
-  price              Int
+  price              Decimal
   status             ListingStatus       @default(ACTIVE)
   createdAt          DateTime            @default(now())
   transactionHistory TransactionHistory?
@@ -49,7 +49,7 @@ model TransactionHistory {
   nft           Nft      @relation(fields: [nftId], references: [id])
   buyerAddress  String
   sellerAddress String
-  price         Int
+  price         Decimal
   createdAt     DateTime @default(now())
   listId        Int      @unique
   list          List     @relation(fields: [listId], references: [id])
