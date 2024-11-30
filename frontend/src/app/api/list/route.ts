@@ -4,6 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+export async function GET() {
+  const response = await prisma.list.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+  });
+
+  return NextResponse.json(response, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   const body: ListingApiBody = await req.json();
   const { nftId, price } = body;
@@ -12,7 +22,6 @@ export async function POST(req: NextRequest) {
     data: {
       nftId,
       price,
-      status: "ACTIVE",
     },
   });
 
