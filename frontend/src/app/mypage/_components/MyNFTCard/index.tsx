@@ -35,7 +35,7 @@ const MyNFTCard = ({ nft }: Props) => {
     <>
       <div>
         <div>
-          <Image width={500} height={500} src={nft.image} alt={nft.name} />
+          <Image width={1000} height={1000} src={nft.image} alt={nft.name} />
         </div>
         <button
           onClick={openModal}

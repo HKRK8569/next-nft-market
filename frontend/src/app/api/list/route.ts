@@ -9,6 +9,9 @@ export async function GET() {
     where: {
       status: "ACTIVE",
     },
+    include: {
+      nft: true,
+    },
   });
 
   return NextResponse.json(response, { status: 200 });
@@ -21,7 +24,7 @@ export async function POST(req: NextRequest) {
   const response = await prisma.list.create({
     data: {
       nftId,
-      price,
+      price: price,
     },
   });
 
