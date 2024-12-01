@@ -6,7 +6,7 @@ import { CreationValues } from "@/app/create/_components/CreationForm";
 import { uploadNFTStorageApi } from "@/apis/nft-storage";
 import { createNFTApi } from "@/apis/nft";
 import { useSWRConfig } from "swr";
-import { listingApi } from "@/apis/list";
+import { cancelListingApi, listingApi } from "@/apis/list";
 import { LogDescription } from "ethers";
 
 const useNFTMarket = () => {
@@ -71,6 +71,31 @@ const useNFTMarket = () => {
         nftId,
         price,
       });
+      mutate(`/api/nfts?userAddress=${signer.address}`);
+      mutate(`/api/list`);
+      mutate(`/api/list?userAddress=${signer.address}`);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const cancelListing = async ({
+    tokenId,
+    listId,
+  }: {
+    tokenId: number;
+    listId: number;
+  }) => {
+    if (!signer) return;
+    const nftMarket = new Contract(NFT_MARKET_ADDRESS, NFT_MARKET.abi, signer);
+    try {
+      const transaction = await nftMarket.cancelListing(tokenId);
+      await transaction.wait();
+      await cancelListingApi(listId);
+
+      mutate(`/api/nfts?userAddress=${signer.address}`);
+      mutate(`/api/list`);
+      mutate(`/api/list?userAddress=${signer.address}`);
     } catch (err) {
       throw err;
     }
@@ -79,6 +104,7 @@ const useNFTMarket = () => {
   return {
     createNFT,
     listNFT,
+    cancelListing,
   };
 };
 

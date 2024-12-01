@@ -37,12 +37,18 @@ const MyNFTCard = ({ nft }: Props) => {
         <div>
           <Image width={1000} height={1000} src={nft.image} alt={nft.name} />
         </div>
-        <button
-          onClick={openModal}
-          className="h-10 w-full bg-black text-center text-white hover:opacity-50"
-        >
-          出品
-        </button>
+        {nft.isListing ? (
+          <button className="h-10 w-full bg-black text-center text-white hover:opacity-50">
+            出品取り消し
+          </button>
+        ) : (
+          <button
+            onClick={openModal}
+            className="h-10 w-full bg-black text-center text-white hover:opacity-50"
+          >
+            出品
+          </button>
+        )}
       </div>
       {isOpen && (
         // eslint-disable-next-line tailwindcss/migration-from-tailwind-2

@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
   const response = await prisma.nft.findMany({
     where: {
       userAddress,
+      isListing: false,
     },
   });
 

@@ -30,3 +30,9 @@ export const listingApi = async (body: ListingApiBody): Promise<List> => {
   const json: List = await response.json();
   return json;
 };
+
+export const cancelListingApi = async (listId: number): Promise<void> => {
+  await fetch(`/api/list/${listId}`, {
+    method: "POST",
+  });
+};
