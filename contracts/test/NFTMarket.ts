@@ -117,4 +117,35 @@ describe("NFTMarket", function () {
       );
     });
   });
+
+  describe("出品取り消し", () => {
+    it("出品取り消しのテスト", async () => {
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const tokenURI = "https://example.com/";
+      const price = 100;
+      await token.connect(owner).createNFT(tokenURI);
+      await token.connect(owner).listNFT(0, price);
+      const tx = await token.connect(owner).cancelListing(0);
+      const marketAddress = await token.getAddress();
+      await expect(tx)
+        .to.emit(token, "NFTTransfer")
+        .withArgs(0, marketAddress, owner.address, "", 0);
+    });
+
+    it("出品されてないtokenIdを取り消そうとした際のテスト", async () => {
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const tx = token.connect(owner).cancelListing(100);
+      await expect(tx).to.be.revertedWith("NFTMarket: nft not listed for sale");
+    });
+
+    it("出品ユーザーと違うユーザーが出品取り消しをした際のテスト", async () => {
+      const { token, owner, addr1 } = await loadFixture(deployTokenFixture);
+      const tokenURI = "https://example.com/";
+      const price = 100;
+      await token.connect(owner).createNFT(tokenURI);
+      await token.connect(owner).listNFT(0, price);
+      const tx = token.connect(addr1).cancelListing(0);
+      await expect(tx).to.be.revertedWith("NFTMarket: you're not the seller");
+    });
+  });
 });
