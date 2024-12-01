@@ -24,7 +24,7 @@ export default function RootLayout({
           theme="light"
         />
         <Header />
-        <div className="size-full">{children}</div>
+        <div className="size-full overflow-auto">{children}</div>
       </body>
     </html>
   );
