@@ -8,6 +8,7 @@ import { createNFTApi } from "@/apis/nft";
 import { useSWRConfig } from "swr";
 import { cancelListingApi, listingApi } from "@/apis/list";
 import { LogDescription } from "ethers";
+import { EventLog } from "ethers";
 
 const useNFTMarket = () => {
   const { signer } = useWalletStore();
@@ -101,10 +102,58 @@ const useNFTMarket = () => {
     }
   };
 
+  const isAddressesEqual = (address1: string, address2: string) => {
+    return address1.toLowerCase() === address2.toLowerCase();
+  };
+
+  const getAddressNFT = async (address: string) => {
+    if (!signer) return;
+    const nftMarket = new Contract(NFT_MARKET_ADDRESS, NFT_MARKET.abi, signer);
+    const addressTofilter = nftMarket.filters.Transfer(null, address);
+    const addressToLogs = await nftMarket.queryFilter(addressTofilter);
+    const addressFromFilter = nftMarket.filters.Transfer(address, null);
+    const addressFromLogs = await nftMarket.queryFilter(addressFromFilter);
+
+    const logs = addressToLogs
+      .concat(addressFromLogs)
+      .sort(
+        (a, b) =>
+          a.blockNumber - b.blockNumber ||
+          a.transactionIndex - b.transactionIndex,
+      ) as EventLog[];
+
+    const owned = new Set<number>();
+
+    for (const log of logs) {
+      if (log.args) {
+        const { from, to, tokenId } = log.args;
+
+        if (isAddressesEqual(to, address)) {
+          owned.add(Number(tokenId));
+        } else if (isAddressesEqual(from, address)) {
+          owned.delete(Number(tokenId));
+        }
+      }
+    }
+
+    const tokenIds = Array.from(owned);
+
+    const promise = tokenIds.map(async (tokenId) => {
+      const tokenURI: string = await nftMarket.tokenURI(tokenId);
+      return {
+        tokenId: tokenId,
+        tokenURI: tokenURI,
+      };
+    });
+
+    return await Promise.all(promise);
+  };
+
   return {
     createNFT,
     listNFT,
     cancelListing,
+    getAddressNFT,
   };
 };
 
