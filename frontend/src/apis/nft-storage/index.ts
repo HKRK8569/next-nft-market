@@ -1,10 +1,10 @@
 type UploadNFTStorageApiResponse = {
-  json_path: string;
-  image_path: string;
+  jsonIpfsHash: string;
+  imageIpfsHash: string;
 };
 
 export const uploadNFTStorageApi = async (
-  body: FormData
+  body: FormData,
 ): Promise<UploadNFTStorageApiResponse> => {
   const response = await fetch("/api/nft-storage", {
     method: "POST",
