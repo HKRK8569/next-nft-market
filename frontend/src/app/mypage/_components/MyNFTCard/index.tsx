@@ -34,8 +34,13 @@ const MyNFTCard = ({ nft }: Props) => {
   return (
     <>
       <div>
-        <div>
-          <Image width={1000} height={1000} src={nft.image} alt={nft.name} />
+        <div className="aspect-square w-full">
+          <Image
+            width={1000}
+            height={1000}
+            src={`https://gateway.pinata.cloud/ipfs/${nft.image}`}
+            alt={nft.name}
+          />
         </div>
         {nft.isListing ? (
           <button className="h-10 w-full bg-black text-center text-white hover:opacity-50">

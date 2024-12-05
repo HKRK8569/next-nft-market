@@ -9,15 +9,17 @@ const ListNFTCard = ({ list }: Props) => {
     <>
       <div>
         <div>
-          <Image
-            width={1000}
-            height={1000}
-            src={list.nft.image}
-            alt={list.nft.name}
-          />
+          <div className="aspect-square w-full">
+            <Image
+              width={1000}
+              height={1000}
+              src={`https://gateway.pinata.cloud/ipfs/${list.nft.image}`}
+              alt={list.nft.name}
+            />
+          </div>
         </div>
         <button className="h-10 w-full bg-black text-center text-white hover:opacity-50">
-          {list.price}ETH 購入
+          {`${list.price} ETH 購入`}
         </button>
       </div>
     </>
