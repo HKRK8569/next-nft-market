@@ -1,44 +1,63 @@
-import { NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { randomUUID } from "crypto";
+import { NextRequest, NextResponse } from "next/server";
+import { PinataSDK } from "pinata-web3";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function POST(req: any) {
+export const pinata = new PinataSDK({
+  pinataJwt: `${process.env.PINATA_JWT}`,
+  pinataGateway: `${process.env.NEXT_PUBLIC_GATEWAY_URL}`,
+});
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const ipfsHash = searchParams.get("ipfsHash");
+
+  if (!ipfsHash) {
+    return NextResponse.json(
+      { message: "ipfsHash is NotFound" },
+      { status: 404 },
+    );
+  }
+  const data = await pinata.gateways.get(ipfsHash);
+
+  return NextResponse.json(data);
+}
+
+export async function POST(req: NextRequest) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const formData = await req.formData();
 
     const name = formData.get("name");
     const description = formData.get("description");
     const image = formData.get("image");
-    const uuid = randomUUID();
 
-    const extension = image.name.split(".").pop();
-    const pictureUploadDir = path.join(process.cwd(), "public/files/images");
-    const jsonUploadDir = path.join(process.cwd(), "public/files/jsons");
-    const pictureUploadPath = path.join(
-      pictureUploadDir,
-      `${uuid}.${extension}`,
-    );
-    const jsonUploadPath = path.join(jsonUploadDir, `${uuid}.json`);
-    const buffer = Buffer.from(await image.arrayBuffer());
-    await fs.promises.writeFile(pictureUploadPath, buffer);
+    if (!image || !(image instanceof File)) {
+      return NextResponse.json(
+        { message: "File is NotFound" },
+        { status: 404 },
+      );
+    }
 
-    const jsonObj = {
-      name: name,
+    if (!name || !description) {
+      return NextResponse.json(
+        { message: "data is NotFound" },
+        { status: 404 },
+      );
+    }
+
+    const imageUpload = await pinata.upload.file(image);
+    const imageIpfsHash = imageUpload.IpfsHash;
+
+    const jsonUpload = await pinata.upload.json({
+      name,
       description,
-      image: pictureUploadPath,
-    };
-    await fs.promises.writeFile(jsonUploadPath, JSON.stringify(jsonObj));
+      image: imageIpfsHash,
+    });
 
-    return NextResponse.json(
-      {
-        json_path: `/files/jsons/${uuid}.json`,
-        image_path: `/files/images/${uuid}.${extension}`,
-      },
-      { status: 200 },
-    );
+    const { IpfsHash } = jsonUpload;
+
+    return NextResponse.json({
+      imageIpfsHash,
+      jsonIpfsHash: IpfsHash,
+    });
   } catch (e) {
     console.log(e);
     return NextResponse.json(

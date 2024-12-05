@@ -21,14 +21,15 @@ const useNFTMarket = () => {
         NFT_MARKET.abi,
         signer,
       );
+
       const data = new FormData();
       data.append("name", values.name);
       data.append("description", values.description);
       data.append("image", values.image);
 
-      const { json_path, image_path } = await uploadNFTStorageApi(data);
+      const { imageIpfsHash, jsonIpfsHash } = await uploadNFTStorageApi(data);
 
-      const transaction = await nftMarket.createNFT(json_path);
+      const transaction = await nftMarket.createNFT(jsonIpfsHash);
 
       const result = await transaction.wait();
 
@@ -40,8 +41,8 @@ const useNFTMarket = () => {
         tokenId: tokenId,
         name: values.name,
         description: values.description,
-        imageUri: image_path,
-        metadataUri: json_path,
+        imageUri: imageIpfsHash,
+        metadataUri: jsonIpfsHash,
         userAddress: signer.address,
       });
       mutate(`/api/nfts?userAddress=${signer.address}`);
