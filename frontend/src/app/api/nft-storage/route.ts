@@ -6,6 +6,21 @@ export const pinata = new PinataSDK({
   pinataGateway: `${process.env.NEXT_PUBLIC_GATEWAY_URL}`,
 });
 
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const ipfsHash = searchParams.get("ipfsHash");
+
+  if (!ipfsHash) {
+    return NextResponse.json(
+      { message: "ipfsHash is NotFound" },
+      { status: 404 },
+    );
+  }
+  const data = await pinata.gateways.get(ipfsHash);
+
+  return NextResponse.json(data);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
